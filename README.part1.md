@@ -96,7 +96,7 @@ These methods are defined for you but currently left blank. These methods are
 responsible from converting from a set of 4 bytes (i.e an `unsigned char` array)
 to a structure representing the socket's message and visa versa.
 
-Once you have implemented these methods correctly, the command `bazel test //...**
+Once you have implemented these methods correctly, the command `bazel test //...`
 should show all tests are passing. If any tests fail, your implementation is
 incorrect. If you believe the tests are in error, please reach out to me ASAP.
 
@@ -123,7 +123,7 @@ drivetrain doesn't need the arm position) and then sent over Unix sockets to the
 processes for each subsystem.
 
 For example, the superstructure socket could listen on `./superstructure_in` and write to
-`./superstructure_output**.
+`./superstructure_output`.
 
 **Figuring out how all this runs together will take the longest.**
 
