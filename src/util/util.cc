@@ -52,16 +52,19 @@ std::optional<Joystick> decode_joystick(const std::array<unsigned char, 4> &raw)
 
 std::array<unsigned char, 4> encode_output(const Output &raw) {
   std::array<unsigned char, 4> ret;
-  
-  ret[3] = (int)((raw.dt_left_voltage + 12) * 254/24);
-  ret[2] = (int)((raw.dt_right_voltage + 12) * 254/24);
-  ret[1] = (int)((raw.arm_voltage + 12) * 254/24);
+
+  // TODO write check_range
+
+  // transform -12 V and 12 V to 0 to 254
+  ret[3] = static_cast<unsigned char>((raw.dt_left_voltage + 12) * 254. / 24.);
+  ret[2] = static_cast<unsigned char>((raw.dt_right_voltage + 12) * 254. / 24.);
+  ret[1] = static_cast<unsigned char>((raw.arm_voltage + 12) * 254. / 24.);
   ret[0] = 0;
 
-  ret[0] |= (raw.enabled << 7); 
-  ret[0] |= (raw.gripper_toggle << 2);
-  ret[0] |= (raw.roller_fwd << 1);
-  ret[0] |= (raw.roller_rev << 0);
+  ret[0] |= (raw.gripper_open << 2);
+  ret[0] |= (raw.roller_forward << 1);
+  ret[0] |= (raw.roller_backwards << 0);
+
   return ret;
 
 }
@@ -85,17 +88,7 @@ std::optional<Output> decode_output(const std::array<unsigned char, 4> &raw) {
 }
 
 std::array<unsigned char, 4> encode_sensors(const Sensors &sensors) {
-std::array<unsigned char, 4> ret{};
-
-  ret[1] = sensors.arm_position;
-  
-  int a = (sensors.arm_position/M_PI) * 4096;
-  
-  ret[2] = a >> 4;
-  ret[1] = (a & 0x00F) << 4;  
-  ret[0] = sensors.lower_limit_on;
-  ret[0] = sensors.upper_limit_on;  
-
+  std::array<unsigned char, 4> ret{};
   return ret;
 }
 
